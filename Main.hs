@@ -60,7 +60,7 @@ mandelbrotGraph pxWidth =
       yRange = Range (-1.5) 1.5
   in GraphRegion pxWidth xRange yRange
 
-main2 =
+main =
   do
     time <- getCurrentTime
     let file = filename time
@@ -70,18 +70,17 @@ main2 =
     graph = mandelbrotGraph 500
     img = ImageRGB8 $ graph2image graph $ render graph
 
-main =
+main2 =
   let iterations = 16
       graph = mandelbrotGraph 500
       dist (Point x y) = distQuilez2 (x :+ y) iterations
       fmap2d = fmap . fmap
       distances =
-        --unlines $
-        fmap unwords -- join strings by space and then by line
+        unlines
+        $ fmap unwords -- join strings by space and then by line
         $ fmap2d show -- Double -> String
         $ fmap2d dist -- get distance for each pt
         $ imgCoords graph
   in do
-    --putStrLn "Writing..."
-    --writeFile "distances.txt" distances
-    putStrLn $ distances !! 0
+    putStrLn "Writing..."
+    writeFile "distances.txt" distances
